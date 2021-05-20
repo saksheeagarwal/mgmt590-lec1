@@ -4,7 +4,7 @@ from transformers.pipelines import pipeline
 
 #Using pertained models
 hg_comp = pipeline('question-answering', model="bert-large-cased-whole-word-masking-finetuned-squad", tokenizer="bert-large-cased-whole-word-masking-finetuned-squad")
-hg_comp_1 = pipeline('question-answering', model="bert-large-cased-whole-word-masking-finetuned-squad", tokenizer="distilbert-base-uncased-distilled-squad")
+hg_comp_1 = pipeline('question-answering', model="distilbert-base-uncased-distilled-squad", tokenizer="distilbert-base-uncased-distilled-squad")
 
 
 #Reading the csv into a dataframe
@@ -23,3 +23,4 @@ for idx, row in data.iterrows():
     question = row['question']
     answer = hg_comp_1({'question': question, 'context': context})['answer']
     print("Q", (idx+1), question, ": \n Ans. ", answer)
+    
