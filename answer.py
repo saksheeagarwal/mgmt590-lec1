@@ -1,25 +1,21 @@
-#Importing libraries
 import pandas as pd
 from transformers.pipelines import pipeline
+from flask import Flask
+from flask import request
+from flask import jsonify
 
-#Using pertained models
-hg_comp = pipeline('question-answering', model="bert-large-cased-whole-word-masking-finetuned-squad", tokenizer="bert-large-cased-whole-word-masking-finetuned-squad")
-hg_comp_1 = pipeline('question-answering', model="bert-large-cased-whole-word-masking-finetuned-squad", tokenizer="distilbert-base-uncased-distilled-squad")
+app = Flask(__name__)
 
+@app.route("/")
+# def hello_world():
+#     return "<p>Hello, World!</p>"
 
-#Reading the csv into a dataframe
-data = pd.read_csv('examples.csv')
+@app.route("/answer", methods = ['POST'])
+def answer():
+    data = request.json
+    hg_comp = pipeline('question-answering', model="bert-large-cased-whole-word-masking-finetuned-squad", tokenizer="bert-large-cased-whole-word-masking-finetuned-squad")
+    answer = hg_comp({'question': data['question'], 'context': data['context']})['answer']
+    return answer
 
-print("Answers using Model 1:\n")
-for idx, row in data.iterrows():
-    context = row['context']
-    question = row['question']
-    answer = hg_comp({'question': question, 'context': context})['answer']
-    print("Q", (idx+1), question, ": \n Ans. ", answer)
-
-print("Answers using Model 2:\n")
-for idx, row in data.iterrows():
-    context = row['context']
-    question = row['question']
-    answer = hg_comp_1({'question': question, 'context': context})['answer']
-    print("Q", (idx+1), question, ": \n Ans. ", answer)
+if __name__ == '__main__' :
+    app.run(host='0.0.0.0', port=8000, threaded=True)
