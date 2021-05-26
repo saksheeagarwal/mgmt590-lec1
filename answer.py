@@ -8,8 +8,10 @@ import sqlite3
 import json
 import time
 
+
 conn = sqlite3.connect('database.db')
 print ("Opened database successfully")
+
 
 conn.execute('CREATE TABLE answered (timestamp DATETIME, model TEXT, answer TEXT, question TEXT, context TEXT)')
 conn.execute('CREATE TABLE models (name TEXT, tokenizer TEXT, model TEXT)')
@@ -34,6 +36,7 @@ def models():
                 }
                 result.append(out)
         return (jsonify(result))
+
 
     if request.method == 'PUT':
         print('in put')
@@ -145,3 +148,5 @@ def answer():
 if __name__ == '__main__':
     # Run our Flask app and start listening for requests!
     app.run(host='0.0.0.0', port=8000, threaded=True)
+
+
