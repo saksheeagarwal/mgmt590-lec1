@@ -6,4 +6,4 @@ RUN pip install -r requirements.txt
 
 COPY answer.py /app/answer.py
 
-CMD ['python', 'app/answer.py']
+CMD ['python', '/app/answer.py']
